@@ -42,10 +42,9 @@ include("include/header.php");?>
                                 </th>
                                 <td>
                                     <select name="os0" id="os0">
-                                        <option value="Small">Small</option>
-                                        <option value="Medium">Medium</option>
-                                        <option value="Large">Large</option>
-                                        <option value="X-Large">X-Large</option>
+                                        <?php foreach($product["sizes"] as $size){?> 
+                                            <option value="<?php echo $size; ?>"><?php  echo $size; ?></option>    
+                                        <?php } ?>
                                     </select>
                                 </td>
                             </tr>
