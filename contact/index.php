@@ -3,6 +3,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
+require_once("../include/config.php");
 
 if ($_SERVER["REQUEST_METHOD"]=="POST"){
     $name=trim($_POST["name"]);
@@ -13,26 +14,25 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         
     }
 
-    foreach($_POST as $value){
-        if (stripos($value,'Content-Type:') != FALSE){
-            $error_message= "There was a problem with the information you entered";
-            
+    if (!isset($error_message)){
+        foreach($_POST as $value){
+            if (stripos($value,'Content-Type:') !== FALSE){
+                $error_message= "There was a problem with the information you entered";
+                
+            }
         }
     }
 
-    if ($_POST["address"] !=""){
+    if (!isset($error_message) and  $_POST["address"]!=""){
         $error_message= "Your form submission has an error";
         
     }
 
-    if (isset($error_message)){
-        require_once("include/PHPMailer-6.9.1/src/PHPMailer.php");
-        $mail= new PHPMailer();
+    require_once(ROOT_PATH."include/PHPMailer/src/PHPMailer.php");
+    $mail= new PHPMailer();
 
-        if (!$mail ->ValidateAddress($email)){
-            echo"You must specify a valid email adderss";
-            exit;
-        }
+    if (!isset($error_message) && !$mail ->ValidateAddress($email)){
+        echo"You must specify a valid email adderss";
 
 
         $email_body="";
@@ -72,18 +72,15 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         } catch (Exception $e) {
             $error_message= "There was a problem sending the email. Mailer Error: {$mail->ErrorInfo}";
         } 
-        header("Location:contact-thanks.php?status=thanks");
+        header("Location:".BASE_URL."contact/?status=thanks");
         exit;
     }
-}
-if (isset($error_message)){
-    echo $error_message;
 }
 ?> 
 <?php 
 $page_title="Contact Ife";
 $section="contact";
-include( 'include/header.php'); ?>
+include(ROOT_PATH.'include/header.php'); ?>
 
     <div class="section page">
         <div class="wrapper">
@@ -91,16 +88,22 @@ include( 'include/header.php'); ?>
             <?php if (isset($_GET["status"]) and $_GET["status"]=="thanks"){?>
                  <p>Thanks for the Email! I&rsquo;ll be in touch shortly</p>
              <?php } else{?>
-
-                <p>I&rsquo;d love to hear from you! Complete the form to send me an email</p>
-                <form method="post"n action="contact.php">
+                <?php 
+                    if (!isset($error_message)){
+                        echo   '<p>I&rsquo;d love to hear from you! Complete the form to send me an email</p>';
+                    } else {
+                        echo '<p class="message ">'. $error_message. '</p >';
+                    }     
+                ?>
+                
+                <form method="post"n action="/PHP_1/contact.php">
                     <table>
                         <tr>   
                             <th>
                                 <label for="name">Name</label>
                             </th>
                             <td>
-                                <input type="text" name="name" id="name">
+                                <input type="text" name="name" id="name" value="<?php if (isset($name)){ echo htmlspecialchars($name); }?>">
                             </td>
                         </tr>
                         <tr>   
@@ -108,7 +111,7 @@ include( 'include/header.php'); ?>
                                 <label for="email">Email</label>
                             </th>
                             <td>
-                                <input type="text" name="email" id="email">
+                                <input type="text" name="email" id="email" value="<?php if (isset($email)){ echo htmlspecialchars($email);}?>">
                             </td>
                         </tr>
                         <tr>   
@@ -116,7 +119,7 @@ include( 'include/header.php'); ?>
                                 <label for="message">Message</label>
                             </th>
                             <td>
-                                <textarea name="message" id="message"></textarea>
+                                <textarea name="message" id="message" value="<?php if (isset($message)){ echo htmlspecialchars($message);}?> "></textarea>
                             </td>
                         </tr>
                         <tr style="display:none;">   
@@ -135,4 +138,4 @@ include( 'include/header.php'); ?>
         </div>  
     </div>
 
-<?php include('include/footer.php'); ?>  
+<?php include(ROOT_PATH.'include/footer.php'); ?>  
