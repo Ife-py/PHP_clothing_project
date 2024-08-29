@@ -1,6 +1,11 @@
 <?php 
+require_once("include/config.php");
+include(ROOT_PATH."include/products.php");
+$recent=get_products_recent();
+
 $page_title="Unique T-shirts designed by Ife";
-include('include/header.php'); ?>
+$section="home";
+include(ROOT_PATH.'include/header.php'); ?>
 
 		<div class="section banner">
 
@@ -21,26 +26,20 @@ include('include/header.php'); ?>
 
 			<div class="wrapper">
 
-				<h2>Mike&rsquo;s Latest Shirts</h2>
-				<?php include("include/products.php")?>
-
+				<h2>Mike&rsquo;s Latest Shirts</h2>		
 				<ul class="products">
-				<?php 
-				$total_products=count($products);
-				$position=0;
-				$list_view_html="";
-				foreach($products as $product_id => $product){
-						$position=$position +1;
-						if ($total_products-$position<4){
-							$list_view_html=get_list_view_html($product_id,$product).$list_view_html;
+					<?php 
+						$list_view_html="";
+						foreach(array_reverse($recent) as $product){
+							$list_view_html=get_list_view_html($product).$list_view_html;
 						}
-                    }
-					echo $list_view_html;
-                ?>
+						echo $list_view_html;
+                	?>
+				</ul>
 			</div>
 
 		</div>
 
 	</div>
 
-<?php include('include/footer.php'); ?>
+<?php include(ROOT_PATH.'include/footer.php'); ?>

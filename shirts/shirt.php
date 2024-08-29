@@ -1,5 +1,7 @@
-<?php include("../include/products.php"); 
+<?php 
 require_once("../include/config.php");
+require_once(ROOT_PATH."/include/products.php"); 
+$products=get_products_all();
 
 if (isset($_GET["id"])){
     $product_id=$_GET["id"];
