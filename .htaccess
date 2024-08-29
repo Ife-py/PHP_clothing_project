@@ -1,6 +1,7 @@
 #More research will be done on this file to understand rewrite in php 
-RewriteEngine On
-RewriteRule ^shirts/$ /shirts/shirts.php
+# RewriteEngine On
+RewriteRule ^shirts/$ /shirts/index.php
+RewriteRule ^shirts/shirt$ /shirts/shirts.php[L]
 RewriteRule ^shirts/([0-9]+)/$ /shirts/shirt.php?id=$1
 RewriteRule ^receipt.php$ /receipt/ [R=301]
 RewriteRule ^contact.php$ /contact/ [R=301]

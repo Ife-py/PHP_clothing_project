@@ -4,7 +4,7 @@ function get_list_view_html($product){
     $output="";
     
     $output= $output . "<li>";
-    $output=$output . '<a href="shirt.php?id='. $product["sku"].'">';
+    $output=$output .'<a href="/PHP_1/shirts/shirt.php?id='. $product["sku"].'">';
     $output=$output. '<img src="/PHP_1/'.$product["img"].'" alt="'.$product["name"].'">';
     $output=$output. "<p>View Details</p>";                    
     $output=$output. "</a>";
@@ -16,12 +16,13 @@ function get_list_view_html($product){
 function get_products_recent(){
     $recent=array();
     $all=get_products_all();
+    
     $total_products=count($all);
     $position=0;
 
     foreach($all as $product){
         $position=$position +1;
-        if ($total_products-$position<4){   
+        if ($total_products-$position <4){   
             $recent[]=$product;
         }
     }
@@ -34,8 +35,7 @@ function get_products_search($s){
 
     foreach($all as $product){
         if (stripos($product["name"],$s) !== false){
-
-        $results[]=$product;
+                $results[]=$product;
         }
     }
     return $results; 
@@ -52,8 +52,8 @@ function get_products_subset($positionStart,$positionEnd){
     $position=0;
     foreach($all as $product){
         $position+=1;
-        if($position>= $positionStart && $position <=$positionEnd){
-        $subset[]=$product;
+        if($position >= $positionStart && $position <=$positionEnd){
+                $subset[]=$product;
         }
     }
     return $subset;
