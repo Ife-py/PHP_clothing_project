@@ -59,6 +59,7 @@ function get_products_subset($positionStart,$positionEnd){
     return $subset;
 }
 function get_products_all(){
+ /*   
     $products= array();
     $products[101] = array(
     	"name" => "Logo Shirt, Red",
@@ -288,8 +289,59 @@ function get_products_all(){
 
     foreach($products as $product_id=> $product){
         $products[$product_id]["sku"]=$product_id;
-    }
+    
+        }*/
+        require(ROOT_PATH."include/database.php");
+        try{
+                $results= $db->query("SELECT name,price,img,sku,paypal  FROM products ORDER BY sku ASC");
+        }catch(Exception $e){
+                echo "Data could not be retireved from the database";
+        exit;
+        }
+
+        //object is a collection of variables called properties and functions called methods 
+
+        $products=$results->fetchAll(PDO::FETCH_ASSOC); 
+
 
     return $products;
+}
+/* return an array of products information for the product that mateches the sku
+*returns a boolean false if no product matches the sku
+*/
+function get_product_single($sku){
+
+        require(ROOT_PATH."include/database.php");
+        try{
+              $results= $db->prepare("SELECT name,price,img,sku,paypal from products WHERE sku=?");
+              $results->bindParam(1,$sku);
+              $results->execute();
+        }catch(Exception $e){
+                echo"DATA not retrievd from database";
+                exit;
+        }
+        $product=$results->fetch(PDO::FETCH_ASSOC);
+
+        if ($product===false) return $product;
+
+        $product["sizes"]=array();
+        try{
+                $results=$db->prepare("
+                        SELECT size 
+                        FROM products_sizes ps 
+                        INNER  JOIN sizes s ON ps.size_id=s.id
+                        WHERE product_sku=?
+                        ORDER BY  `order`");
+                $results->bindParam(1,$sku);
+                $results->execute();
+        }catch(Exception $e){
+                echo "Data could not be retrieved from the database";
+                exit;
+        }
+
+        while($row=$results->fetch(PDO::FETCH_ASSOC)){
+                $product["sizes"][]=$row["size"];
+        }
+        return $product;
 }
 ?>

@@ -1,16 +1,13 @@
 <?php 
 require_once("../include/config.php");
 require_once(ROOT_PATH."/include/products.php"); 
-$products=get_products_all();
 
 if (isset($_GET["id"])){
-    $product_id=$_GET["id"];
-    if (isset($products[$product_id])){
-        $product=$products[$product_id];
-    }
+    $product_id=intval($_GET["id"]);
+    $product=get_product_single($product_id);
 }
-
-if (!isset($product)){
+// a product will only be set and not false if an id is specified in the query string and it corresponds to a real product.
+if (empty($product)){
     header("Location:" ."/PHP_1/"."shirts/");
     exit();
 } 
