@@ -1,5 +1,5 @@
 <?php 
-
+//function to display a single product highlighted
 function get_list_view_html($product){
     $output="";
     
@@ -13,6 +13,7 @@ function get_list_view_html($product){
     return $output;
 }
 
+// function to get the most recent product from the database and return them in a reverse order
 function get_products_recent(){
 //     $recent=array();
 //     $all=get_products_all();
@@ -44,6 +45,7 @@ function get_products_recent(){
         return $recent;
 }
 
+// a function to help get the id of the most recent project
 function get_products_search($s){
 /*     $results=array();
      $all=get_products_all();
@@ -73,6 +75,7 @@ function get_products_search($s){
 
 }
 
+// a function to count the amount of products present in the database
 function get_products_count(){
         require(ROOT_PATH."include/database.php");
         try{
@@ -86,6 +89,7 @@ function get_products_count(){
         return intval($results->fetchColumn(0));
 }
 
+// fucntion to get the list of products that need to be displayed on the paginated screen
 function get_products_subset($positionStart,$positionEnd){
 //     $subset=array();
 //     $all= get_products_all();
@@ -117,6 +121,8 @@ function get_products_subset($positionStart,$positionEnd){
         $subset=$results->fetchAll(PDO::FETCH_ASSOC);
         return $subset;
 }
+
+// function to get call all the products from the database
 function get_products_all(){
  /*   
     $products= array();
