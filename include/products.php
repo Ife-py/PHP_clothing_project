@@ -14,49 +14,108 @@ function get_list_view_html($product){
 }
 
 function get_products_recent(){
-    $recent=array();
-    $all=get_products_all();
+//     $recent=array();
+//     $all=get_products_all();
     
-    $total_products=count($all);
-    $position=0;
+//     $total_products=count($all);
+//     $position=0;
 
-    foreach($all as $product){
-        $position=$position +1;
-        if ($total_products-$position <4){   
-            $recent[]=$product;
+//     foreach($all as $product){
+//         $position=$position +1;
+//         if ($total_products-$position <4){   
+//             $recent[]=$product;
+//         }
+//     }
+
+        require(ROOT_PATH."include/database.php");
+
+        try{
+                $results=$db->query("
+                        SELECT name,price,img,sku,paypal
+                        FROM products
+                        ORDER BY sku DESC
+                        LIMIT 4");
+        }catch(Exception $e){
+                echo"Data could not be retrieved from the database";
+                exit;
         }
-    }
-    return $recent;
+        $recent=$results->fetchAll(PDO::FETCH_ASSOC);
+        $recent=array_reverse($recent);
+        return $recent;
 }
 
 function get_products_search($s){
-    $results=array();
-    $all=get_products_all();
-
-    foreach($all as $product){
-        if (stripos($product["name"],$s) !== false){
-                $results[]=$product;
+/*     $results=array();
+     $all=get_products_all();
+     foreach($all as $product){
+              if (stripos($product["name"],$s) !== false){
+                               $results[]=$product;
+                                        }
+                                   }
+                return $results;*/ 
+        require(ROOT_PATH."include/database.php");
+        try{
+                $results=$db->prepare("
+                        SELECT name,price,img,sku,paypal
+                        FROM products
+                        WHERE name LIKE ?
+                        ORDER BY sku
+                        ");
+                        $results->bindValue(1,"%" .$s. "%");
+                        $results->execute();
+        }catch(Exception $e){
+                echo"Data could not be retrieved from the database";
+                exit;
         }
-    }
-    return $results; 
+        $matches=$results->fetchAll(PDO::FETCH_ASSOC);
+
+        return $matches;
+
 }
 
 function get_products_count(){
-    return count(get_products_all());
+        require(ROOT_PATH."include/database.php");
+        try{
+                $results=$db->query("
+                        SELECT COUNT(sku)
+                        FROM products");
+        }catch(Exception $e){
+                echo"Data could not be retrieved from the database";
+                exit;
+        }
+        return intval($results->fetchColumn(0));
 }
 
 function get_products_subset($positionStart,$positionEnd){
-    $subset=array();
-    $all= get_products_all();
+//     $subset=array();
+//     $all= get_products_all();
 
-    $position=0;
-    foreach($all as $product){
-        $position+=1;
-        if($position >= $positionStart && $position <=$positionEnd){
-                $subset[]=$product;
+//     $position=0;
+//     foreach($all as $product){
+//         $position+=1;
+//         if($position >= $positionStart && $position <=$positionEnd){
+//                 $subset[]=$product;
+//         }
+//     }
+
+        $offset=$positionStart-1;
+        $rows=$positionEnd-$positionStart + 1;
+        require(ROOT_PATH."include/database.php");
+        try{
+                $results=$db->prepare("
+                        SELECT name,price,img,sku,paypal
+                        FROM products
+                        ORDER BY sku
+                        LIMIT ?,?");
+                $results->bindParam(1,$offset,PDO::PARAM_INT);
+                $results->bindParam(2,$rows,PDO::PARAM_INT);
+                $results->execute();  
+        }catch(Exception $e){
+                echo"Data could not be retrieved from the database";
+                exit;
         }
-    }
-    return $subset;
+        $subset=$results->fetchAll(PDO::FETCH_ASSOC);
+        return $subset;
 }
 function get_products_all(){
  /*   
