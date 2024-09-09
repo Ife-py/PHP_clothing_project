@@ -409,4 +409,3 @@ function get_product_single($sku){
         }
         return $product;
 }
-?>
