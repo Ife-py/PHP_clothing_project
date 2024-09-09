@@ -15,18 +15,18 @@ function get_list_view_html($product){
 
 // function to get the most recent product from the database and return them in a reverse order
 function get_products_recent(){
-//     $recent=array();
-//     $all=get_products_all();
+/*    $recent=array();
+    $all=get_products_all();
     
-//     $total_products=count($all);
-//     $position=0;
+    $total_products=count($all);
+    $position=0;
 
-//     foreach($all as $product){
-//         $position=$position +1;
-//         if ($total_products-$position <4){   
-//             $recent[]=$product;
-//         }
-//     }
+    foreach($all as $product){
+        $position=$position +1;
+        if ($total_products-$position <4){   
+            $recent[]=$product;
+        }
+    }*/
 
         require(ROOT_PATH."include/database.php");
 
@@ -91,16 +91,16 @@ function get_products_count(){
 
 // fucntion to get the list of products that need to be displayed on the paginated screen
 function get_products_subset($positionStart,$positionEnd){
-//     $subset=array();
-//     $all= get_products_all();
+/*    $subset=array();
+    $all= get_products_all();
 
-//     $position=0;
-//     foreach($all as $product){
-//         $position+=1;
-//         if($position >= $positionStart && $position <=$positionEnd){
-//                 $subset[]=$product;
-//         }
-//     }
+    $position=0;
+    foreach($all as $product){
+        $position+=1;
+        if($position >= $positionStart && $position <=$positionEnd){
+                $subset[]=$product;
+        }
+    }*/
 
         $offset=$positionStart-1;
         $rows=$positionEnd-$positionStart + 1;
