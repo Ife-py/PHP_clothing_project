@@ -35,21 +35,19 @@
     $page_title ="'Ife's full catalogue of shirt'";
     $section ="shirts";
     include(ROOT_PATH.'include/header.php'); ?>
+    <div class="section shirts page">
+        <div class="wrapper">
+            <h1>Ife&rsquo;s Full Catalog Of Shirts</h1>
+            <?php include(ROOT_PATH."include/list_nav.html.php"); ?>
 
-        <div class="section shirts page">
-            <div class="wrapper">
-                <h1>Ife&rsquo;s Full Catalog Of Shirts</h1>
-                <?php include(ROOT_PATH."include/list_nav.html.php"); ?>
-
-                <ul class="products">
-                    <?php foreach($products as $product){
-                            echo get_list_view_html($product);
-                        }
-                    ?>
-                </ul>
-                <?php include(ROOT_PATH."include/list_nav.html.php") ?>;
-                
-            </div>
+            <ul class="products">
+                <?php foreach($products as $product){
+                        echo get_list_view_html($product);
+                    }
+                ?>
+            </ul>
+            <?php include(ROOT_PATH."include/list_nav.html.php") ?>;
         </div>
+    </div>
 
 <?php include(ROOT_PATH.'include/footer.php'); ?> 
